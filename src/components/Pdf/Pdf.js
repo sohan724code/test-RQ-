@@ -8,7 +8,13 @@ const Pdf = () => {
     const doc = new jsPDF();
     doc.html(ref.current, {
       callback: function (doc) {
-        doc.output("dataurlnewwindow", { filename: "custom-ticketed-pdf" });
+        doc.output("dataurlnewwindow", {
+          filename: "custom-ticketed-pdf",
+        });
+        // const downloadLink = document.createElement("a");
+        // downloadLink.href = pdfDataUri;
+        // downloadLink.download = `Custom-file.pdf`;
+        // downloadLink.click();
       },
       x: 10,
       y: 10,
