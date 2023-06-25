@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 
 const fetchComments = async (postId) => {
   const response = await fetch(
@@ -31,10 +31,38 @@ export const PostDetails = ({ post }) => {
     ["comment", post.id],
     () => fetchComments(post.id)
   );
+
+  const deleteMutation = useMutation(() => deletePost(post.id));
+
+  const updateMutation = useMutation(() => updatePost(post.id));
+
   return (
     <Box>
       <Typography style={{ color: "blue" }}>{post.title}</Typography>
-      <button>Delete</button> <button>Update title</button>
+      <button onClick={() => deleteMutation.mutate(post.id)}>
+        Delete
+      </button>{" "}
+      <button onClick={() => updateMutation.mutate(post.id)}>
+        Update title
+      </button>
+      {updateMutation.isError && (
+        <Typography sx={{ color: "red" }}>Update Error...</Typography>
+      )}
+      {updateMutation.isLoading && (
+        <Typography sx={{ color: "blue" }}>Uploading...</Typography>
+      )}
+      {updateMutation.isSuccess && (
+        <Typography sx={{ color: "green" }}>Update Success...</Typography>
+      )}
+      {deleteMutation.isError && (
+        <Typography sx={{ color: "red" }}>Deleting Error...</Typography>
+      )}
+      {deleteMutation.isLoading && (
+        <Typography sx={{ color: "blue" }}>Deleting...</Typography>
+      )}
+      {deleteMutation.isSuccess && (
+        <Typography sx={{ color: "green" }}>Delete Successful...</Typography>
+      )}
       <Typography>{post.body}</Typography>
       <Typography>Comments</Typography>
       {isLoading ? (
